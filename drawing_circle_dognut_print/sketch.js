@@ -6,7 +6,7 @@ let inten;
 
 
 function setup() {
-  createCanvas(2000,2000);
+  createCanvas(850,850);
   angleMode(DEGREES);
   noFill();
   stroke(0);
@@ -14,7 +14,6 @@ function setup() {
 
 seedx = random(0,1000);
 seedy = random(0,1000);
-colorMode(HSB);
 inten = 0.25;
 
 }
@@ -36,16 +35,18 @@ function mousePressed() {
 }
 
 function keyPressed(){
-if(keyCode==SHIFT){
+if(keyCode==OPTION){
 saveCanvas("image","jpg");
-}else if(keyCode==UP_ARROW){
+}else if(keyCode==CONTROL){
+print("butthole");
 background(255);
-for(a=0;a<10;a++){
+for(a=0;a<1;a++){
 //stroke(random(0,255),100,100);
-rad = 100;//random(200,300);
+rad = 200;//random(200,300);
 rad2 = 200;//random(200,300);
-let off = 300;
-buttHole(random(off,width-off),random(off,height-off));
+let off = 100;
+buttHole(width/2,height/2);
+//buttHole(random(off,width-off),random(off,height-off));
 }
 }
 }
@@ -68,10 +69,10 @@ for(e=0;e<360;e++){
 }
 
 function cir(mx,my){
- for(i=0;i<360;i++){
+ for(i=0;i<720;i++){
    let r = rad;
-   let xx = sin(i)*r+mx; 
-   let yy = cos(i)*r+my;
+   let xx = sin(i/2)*r+mx; 
+   let yy = cos(i/2)*r+my;
    point(xx,yy);
  }
 }

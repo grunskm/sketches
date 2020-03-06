@@ -2,9 +2,11 @@
 
 let n = 10;
 function setup(){
-	createCanvas(windowWidth,windowHeight);
+	createCanvas(1100,850);
+	background(255);
 	stroke(0);
-	strokeWeight(3);
+	strokeWeight(1);
+	
 }
 
 function draw(){
