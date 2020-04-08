@@ -6,7 +6,7 @@ let inten;
 
 
 function setup() {
-  createCanvas(850,850);
+  createCanvas(windowWidth,windowHeight);
   angleMode(DEGREES);
   noFill();
   stroke(0);
@@ -40,13 +40,13 @@ saveCanvas("image","jpg");
 }else if(keyCode==CONTROL){
 print("butthole");
 background(255);
-for(a=0;a<1;a++){
+for(a=0;a<3;a++){
 //stroke(random(0,255),100,100);
 rad = 200;//random(200,300);
-rad2 = 200;//random(200,300);
+rad2 = 200;// random(200,300);
 let off = 100;
-buttHole(width/2,height/2);
-//buttHole(random(off,width-off),random(off,height-off));
+//buttHole(width/2,height/2);
+buttHole(random(off,width-off),random(off,height-off));
 }
 }
 }
