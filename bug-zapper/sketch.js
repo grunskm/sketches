@@ -9,7 +9,7 @@ let zapper;
 let cursor0;
 let seperation;
 
-let scale = 0.06;
+let scale = 0.002;
 let weight = 10;
 
 let w;
@@ -35,13 +35,13 @@ function draw(){
 
 	translate(width/2,height/2);
 
-	zapper.display(-seperation,-10);
-	zapper.display(seperation,10);
+	zapper.display(-seperation,-20);
+	zapper.display(seperation,20);
 
 	for(i=0;i<num;i++){
 		fly[i].collide();
-		fly[i].display(-seperation,-10);
-		fly[i].display(seperation,10);
+		fly[i].display(-seperation,-20);
+		fly[i].display(seperation,20);
 	}
 }
 
@@ -58,7 +58,7 @@ function keyPressed(){
 function FlyTrap(){
 	this.x;
 	this.y;
-	this.d = 15;
+	this.d = w*0.6;
 
 	this.zapper = 0;
 
@@ -71,23 +71,26 @@ function FlyTrap(){
 	
 	this.display = (POS,OFF)=>{
 		push();
-		fill(255,50);
-		noStroke();
+
 
 		this.x = map(mouseX,0,width,-w,w);
 		this.y = map(mouseY,0,height,-w,w);
-
-		dImage(this.x+OFF, this.y,this.d,POS,cursor0);
 		
 		if(this.zapper==0){
 			dPoint(this.tx+OFF,this.ty,this.td,POS);
 		}else if(this.zapper==1){
 			this.tw = this.x-this.tx;
 			this.th = this.y-this.ty;
+			stroke(255,50);
+			strokeWeight(2);
+			noFill();
 			dRect(this.tx+OFF,this.ty,this.tw,this.th,this.td,POS);
 		}else if(this.zapper == 2){
+			fill(255,50);
+			noStroke();
 			dRect(this.tx+OFF,this.ty,this.tw,this.th,this.td,POS);
 		}
+		dImage(this.x+OFF, this.y,this.d,POS,cursor0);
 		pop();
 	}
 
@@ -99,6 +102,14 @@ function FlyTrap(){
 			this.zapper = 1;
 		}else if(this.zapper == 1){
 			this.zapper = 2;
+			if(this.tw<0){
+				this.tw *= -1;
+				this.tx -= this.tw;
+			}
+			if(this.th<0){
+				this.th *= -1;
+				this.ty -= this.th;
+			}
 		}else if(this.zapper == 2){
 			this.zapper = 0;
 			this.tx = undefined;
@@ -140,7 +151,7 @@ function Fly(){
 		let offset = OFF;
 		this.x = noise(this.inc+this.xseed)*w-(w/2)+offset+this.wiggle;
 		this.y = noise(this.inc+this.yseed)*w-(w/2)+this.wiggle;
-		this.d = noise(this.inc+this.dseed)*25+this.wiggle;
+		this.d = noise(this.inc+this.dseed)*w+this.wiggle;
 
 		dPoint(this.x,this.y,this.d,POS);
 	}
@@ -150,8 +161,8 @@ function Fly(){
 		if(
 		zapper.zapper == 2 &&
 		this.d < zapper.td && 
-		this.d > zapper.td-0.1 &&
-		this.x > zapper.tx && 
+		this.d > zapper.td-2 &&
+		this.x > zapper.tx+10 && 
 		this.x < zapper.tx + zapper.tw && 
 		this.y > zapper.ty && 
 		this.y < zapper.ty + zapper.th){

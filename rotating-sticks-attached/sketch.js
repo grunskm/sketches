@@ -1,10 +1,12 @@
 
 let n = 10;
-let scale = 0.001;
-let weight = 5;
+let scale = 0.003;
+let weight = 3;
 let w;
 
-let frame;
+let view;
+
+let inc = 0;
 
 
 function setup(){
@@ -13,67 +15,72 @@ function setup(){
 	w = width*0.1;
 	seperation = width*0.2;
 
-	frame = new Frame(n);
-	
+	view = new Frame();
 }
 
 function draw(){
-
+	inc++;
 	background(100);
 
-	frame.display(-seperation,-10);
-	frame.display(seperation,10);
+	view.display(-seperation,-10);
+	view.display(seperation,10);
 
 }
 
-function Frame(N){
+function Frame(){
 
 
-	this.n = N;
-	this.depth = 6;
-
-	this.beam;
-
+	this.beam = new Beam(6);
 
 
 	this.display = (POS,OFF)=>{
 		push();
 		translate(width/2+POS,height/2);
-		for(b=0;b<this.n;b++){
-			this.beam[b].display(OFF);
-		}
+		this.beam.display(0,40,-200,OFF);
 		pop();
 	}
 
 
-	function Beam(X,Y,N){
+	function Beam(N){
 
 		this.n = N;
-		this.r = random(0,360);
-		this.rate = random(0,10);
-
-		this.x = X;
-		this.y = Y;
-		this.d = random(0,w);
-		this.r1;
-		this.r2;
+		this.deg = 0;//random(0,360);
+		this.rate = random(-0.3,0.3);
 
 
+		
 
-		this.display = (OFF)=>{
-			let inc = frameCount/this.rate%360+this.r;
-			let d1 = this.d + sin(inc)*w;
-			let d2 = this.d + sin(inc-180)*w;
-			let x1 = this.x + cos(inc)*w;
-			let x2 = this.x + cos(inc-180)*w;
-			dLine(x1,this.y1,d1,x2,this.y2,d2,20,OFF);
+		this.r1 = 30;
 
+		this.r2 = 80;
+
+		this.child;
+
+		if(this.n>0){
+			this.child = new Beam(this.n-1);
 		}
 
+		this.display = (X, D, Y, OFF)=>{
+
+			let inc = frameCount*this.rate%360+this.deg;
+			let wig = frameCount*this.rate+this.deg;
+			let  y1 = noise(wig*0.02)*(-this.r2/2)+(Y+50); 
+			let  y2 = noise(wig*0.01)*(this.r1/2)+(Y+30); 
+			let  d1 = D + sin(inc)*this.r1;
+			let  d2 = D + sin(inc-180)*this.r2;
+			let  x1 = X + cos(inc)*this.r1;
+			let  x2 = X + cos(inc-180)*this.r2;
+			
+			//dPoint(x2,y2,d2,OFF);
+			//dPoint(x1,y1,d1,OFF);
+			dLine(x1,y1,d1,x2,y2,d2,20,OFF);
+
+			if(this.child!=undefined){
+				this.child.display(x2,d2,y2,OFF);
+			}
+		}
 	}
-
 }
-
 
 
 function dRect(X,Y,W,H,D,POS){
@@ -90,8 +97,8 @@ function dPoint(X,Y,D,POS){
 	//receives X,Y,D in pixels. D is distance from view point in 'pixels'. X,Y => W,H
 
 	let s = 1/(1+(D*scale));
-
-	strokeWeight(s*weight);
+	stroke(255,0,100);
+	strokeWeight(s*40);
 	let x = X*s;
 	let y = Y*s;
 	point(x+POS,y);
